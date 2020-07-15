@@ -1,85 +1,44 @@
-const int  m1=8; // Motor 1
-const int  m2=7; // Motor 2
-const int  botao = 2;
-const int  pinoVelocidade = 9;
-int  velocidadeMax =255;
-int  velocidadeMedia = 180;
-int  velocidadeMin= 150;
-int  estadoBotao = 0;
-int  opcao = 0;
-int  valorMin= 1; // Valor minimo do aleatorio
-int  valorMax = 1; // Valor maximo do aleatorio
+#include <Servo.h>
 
-void setup(){
-	Serial.begin(19200);
-	pinMode(m1, OUTPUT);
-	pinMode(m2, OUTPUT);
+int  alto = 140;
+int  baixo = 0;
+int  portaServo = 9;
+int  botao = 13;
+
+int  tempo = 5;
+
+// Cria um objeto para controlar o motor
+Servo meuServo;
+
+// Variavel para armazenar o angulo
+int  pos = 0;
+
+void setup() {
+	meuServo.write(baixo);
+	delay(1000);
+	// Informa que o servo esta conectado na porta digital 9
+	meuServo.attach(portaServo);
 	pinMode(botao, INPUT_PULLUP);
-	pinMode(pinoVelocidade, OUTPUT);		
-	randomSeed(analogRead(0)); // randomSeed(analogRead(0));
-	 ajustarVelocidade(velocidadeMax);
-	
-}
-void loop(){
-	opcao= random(valorMin,valorMax);  //opcao= numeroAleatorio(valorMin,valorMax); 	
-	estadoBotao = digitalRead(botao);
-	if(estadoBotao == LOW){
-		fecharCaixa(opcao);
-	}
-
-	
-
 }
 
-void ajustarVelocidade(int  velocidade){
-	analogWrite(pinoVelocidade, velocidade);
-}
-
-void fecharCaixa(int  opcao){
-	switch(opcao){
-		case 1:
-			estadoBotao = digitalRead(botao);
-			ajustarVelocidade(velocidadeMedia);
-			int  tempoInicio = millis();
-			while( estadoBotao == LOW){
-				Serial.print("entrou do while");
-				Serial.print("\n");
-				girarParaFrente();
-				estadoBotao = digitalRead(botao);	
-			}
-			Serial.print("saiu do while");
-			Serial.print("\n");
-			int  intervalo = millis() - tempoInicio;
-			if(intervalo >= 1200){
-				intervalo = 500;
-			}
-			pararGirar();
-			delay(100);
-			girarParaTras();
-			delay(intervalo/5);
-			pararGirar();
-			delay(100);
-		break;
+void loop() {
+	if(!digitalRead(botao)){	// Movimenta o servo do angulo baixo ate o angulo alto de um a um grau
+		for (pos = baixo; pos <= alto; pos += 1) {
+			// Movimenta o servo para o angulo especificado
+			meuServo.write(pos);        
+			pos > (alto/2) ? tempo = 2 : tempo = 8;      
+			// Espera o motor se mover
+			delay(tempo);
+		}
+		int  aleatorio = random(15);
+		// Movimenta o servo do angulo alto ate o angulo baixo de um a um grau
+		for (pos = alto; pos >= (baixo-10); pos -= 1) {
+			// Movimenta o servo para o angulo especificado
+			meuServo.write(pos);
+			// Espera o motor se mover
+			delay(aleatorio);
+		}
+		meuServo.write(baixo);
 	}
 }
-
-
-void girarParaFrente(){
-	digitalWrite(m1,HIGH);
-	digitalWrite(m2,LOW);
-}
-
-void girarParaTras(){
-	digitalWrite(m1,LOW);
-	digitalWrite(m2,HIGH);
-}
-
-void pararGirar(){
-	digitalWrite(m1,LOW);
-	digitalWrite(m2,LOW);
-}
-
-
-
-
 

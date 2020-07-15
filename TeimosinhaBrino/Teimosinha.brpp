@@ -1,93 +1,44 @@
-Constante Numero m1=9; // Motor 1
-Constante Numero m2=10; // Motor 2
-Constante Numero botao = 2;
-Numero pinoVelocidade=8;
-Numero velocidadeMax =255;
-Numero velocidadeMedia = 180;
-Numero velocidadeMin= 150;
-Numero estadoBotao = 0;
-Numero opcao = 0;
-Numero valorMin= 1; // Valor minimo do aleatorio
-Numero valorMax = 1; // Valor maximo do aleatorio
+usar Servo
 
-Configuracao(){
-	USB.conectar(9600);
-	Pino.definirModo(m1, Saida);
-	Pino.definirModo(m2, Saida);
-	Pino.definirModo(botao, Entrada_PULLUP);
-	Pino.definirModo(pinoVelocidade, Saida);		
-	randomSeed(analogRead(0)); // geradorAleatorio(Pino.lerAnalogico(0));
-	 ajustarVelocidade(velocidadeMax);
-	
-}
-Principal(){
-	opcao= random(valorMin,valorMax);  //opcao= numeroAleatorio(valorMin,valorMax); 	
-	estadoBotao = Pino.ler(botao);
-	se(estadoBotao == Desligado){
-		ativarCaixa(opcao);
-	}
+Numero alto = 140;
+Numero baixo = 0;
+Numero portaServo = 9;
+Numero botao = 13;
 
-	
+Numero tempo = 5;
 
+// Cria um objeto para controlar o motor
+Servo meuServo;
+
+// Variavel para armazenar o angulo
+numero pos = 0;
+
+Configuracao() {
+	meuServo.escreverAngulo(baixo);
+	esperar(1000);
+	// Informa que o servo esta conectado na porta digital 9
+	meuServo.conectar(Digital.portaServo);
+	definirModo(botao, Entrada_PULLUP);
 }
 
-Procedimento ajustarVelocidade(Numero velocidade){
-	Pino.escreverAnalogico(pinoVelocidade, velocidade);
-}
-
-Procedimento ativarCaixa(Numero opcao){
-	seletor(opcao){
-		caso 1:
-		fecharCaixa();
-		quebrar;
-		caso 2:
-		esperar(1000);
-		fecharCaixa();
-		quebrar;
+Principal() {
+	se(!Pino.ler(botao)){	// Movimenta o servo do angulo baixo ate o angulo alto de um a um grau
+		para (pos = baixo; pos <= alto; pos += 1) {
+			// Movimenta o servo para o angulo especificado
+			meuServo.escreverAngulo(pos);        
+			pos > (alto/2) ? tempo = 2 : tempo = 8;      
+			// Espera o motor se mover
+			esperar(tempo);
+		}
+		Numero aleatorio = numeroAleatorio(15);
+		// Movimenta o servo do angulo alto ate o angulo baixo de um a um grau
+		para (pos = alto; pos >= (baixo-10); pos -= 1) {
+			// Movimenta o servo para o angulo especificado
+			meuServo.escreverAngulo(pos);
+			// Espera o motor se mover
+			esperar(aleatorio);
+		}
+		meuServo.escreverAngulo(baixo);
 	}
 }
-
-
-Procedimento girarParaFrente(){
-	Pino.ligar(m1);
-	Pino.desligar(m2);
-}
-
-Procedimento girarParaTras(){
-	Pino.desligar(m1);
-	Pino.ligar(m2);
-}
-
-Procedimento pararGirar(){
-	Pino.desligar(m1);
-	Pino.desligar(m2);
-}
-
-Procedimento fecharCaixa(){
-	estadoBotao = Pino.ler(botao);
-			ajustarVelocidade(velocidadeMedia);
-			Numero tempoInicio = millis();
-			enquanto( estadoBotao == Desligado){
-				USB.enviar("entrou do while");
-				USB.enviar("\n");
-				girarParaFrente();
-				estadoBotao = Pino.ler(botao);	
-			}
-			USB.enviar("saiu do while");
-			USB.enviar("\n");
-			Numero intervalo = millis() - tempoInicio;
-			se(intervalo >= 1200){
-				intervalo = 500;
-			}
-			pararGirar();
-			esperar(100);
-			girarParaTras();
-			esperar(intervalo/5);
-			pararGirar();
-			esperar(100);
-}
-
-
-
-
 
