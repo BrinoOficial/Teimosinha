@@ -2,14 +2,14 @@
 usar Servo
 
 // Declara nossas variaveis de posicao
-Numero alto = 140;
-Numero baixo = 0;
+numero alto = 140;
+numero baixo = 0;
 // Declara as conexoes dos componentes
-Numero portaServo = 9;
-Numero botao = 13;
+numero portaServo = 9;
+numero botao = 13;
 
 // Cria uma variável para o tempo (sera alterada)
-Numero tempo = 5;
+numero tempo = 5;
 
 // Cria um objeto para controlar o motor
 Servo meuServo;
@@ -17,7 +17,7 @@ Servo meuServo;
 // Variavel para armazenar o angulo
 numero pos = 0;
 
-Configuracao() {
+configuracao() {
 	meuServo.escreverAngulo(baixo);
 	esperar(1000);
 	// Informa que o servo esta conectado na porta digital 9
@@ -25,8 +25,8 @@ Configuracao() {
 	definirModo(botao, Entrada_PULLUP);
 }
 
-Principal() {
-	se(!Pino.ler(botao)){	// Movimenta o servo do angulo baixo ate o angulo alto de um a um grau
+principal() {
+	se(!lerDigital(botao)){	// Movimenta o servo do angulo baixo ate o angulo alto de um a um grau
 		para (pos = baixo; pos <= alto; pos += 1) {
 			// Movimenta o servo para o angulo especificado
 			meuServo.escreverAngulo(pos);        
@@ -34,7 +34,7 @@ Principal() {
 			// Espera o motor se mover
 			esperar(tempo);
 		}
-		Numero aleatorio = numeroAleatorio(15);
+		numero aleatorio = numeroAleatorio(15);
 		// Movimenta o servo do angulo alto ate o angulo baixo de um a um grau
 		para (pos = alto; pos >= (baixo-10); pos -= 1) {
 			// Movimenta o servo para o angulo especificado
