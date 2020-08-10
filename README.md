@@ -6,10 +6,10 @@ Para montar esse projeto foram usados os seguintes materiais:
 
 * Arduino Uno
 * Um servo motor 9g
-* Base/caixa para montagem
+* Base/caixa para montagem (usamos uma caixa cortada a laser)
 * Interruptor alavanca
 * Alguns jumpers/fios
-* Alimentação (usaremos baterias 18650 no caso)
+* Alimentação (usamos baterias 18650 no caso)
 
 # Circuito
 A montagem do circuito pode ser visto na imagam abaixo:
