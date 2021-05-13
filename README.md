@@ -14,6 +14,8 @@ Para montar esse projeto foram utilizados os seguintes materiais:
 
 # Estrutura
 A caixa que estrutura o protótipo foi feita com uma chapada de mdf cru cortada a laser, de acordo com o modelo disponível na pasta "Estrutura"
+![Imagem da Estrutura](https://github.com/BrinoOficial/Teimosinha/blob/master/Estrutura/Estrutura.png)
+
 
 # Circuito
 A montagem do circuito pode ser visto na imagam abaixo:
